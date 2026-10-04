@@ -15,7 +15,7 @@ window.PORTFOLIO_DATA = {
     location: "Nairobi, Kenya",
     timezone: "EAT",
     email: "abdirahmanmoha608@gmail.com",
-    linkedin: "https://linkedin.com/in/abdiahmed-ds",
+    linkedin: "https://www.linkedin.com/in/abdirahmanahmed-ds",
     github: "https://github.com/abdiahmed-ds",
   },
 
