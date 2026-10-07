@@ -19,9 +19,6 @@ window.PORTFOLIO_DATA = {
     github: "https://github.com/abdiahmed-ds",
   },
 
-  /* ---------- STATS ----------
-     Removed — no fake numbers on the site. */
-
   /* ---------- NOTES ---------- */
   notes: [
     {
@@ -50,10 +47,9 @@ window.PORTFOLIO_DATA = {
     },
   ],
 
-  /* ---------- CURRENTLY ---------- */
-   /* ---------- CURRENTLY ----------
-     Optional — if you set `text: ""` the loader will
-     leave the pills in your HTML untouched. */
+  /* ---------- CURRENTLY ----------
+     Optional. If `text` is empty, the loader leaves
+     the pills in index.html untouched. */
   currently: {
     label: "Currently",
     text: "",

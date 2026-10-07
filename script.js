@@ -31,7 +31,7 @@
       .join("");
   }
 
-   /* --- CURRENTLY PILLS (only overwrite the first one) --- */
+  /* --- CURRENTLY PILLS (only overwrite the first one) --- */
   if (data.currently && data.currently.text) {
     const firstNow = document.querySelector(".hero-now-stack .hero-now:first-child");
     if (firstNow) {
@@ -81,10 +81,13 @@
       }
     });
 
+    /* Only rewrite links that point to a GitHub PROFILE (github.com/username).
+       Project links (github.com/username/repo/...) are left untouched. */
     document
       .querySelectorAll('a[href*="github.com"]')
       .forEach((a) => {
-        if (data.personal.github) a.href = data.personal.github;
+        const isProfileOnly = /^https?:\/\/(www\.)?github\.com\/[^/]+\/?$/.test(a.href);
+        if (isProfileOnly && data.personal.github) a.href = data.personal.github;
       });
     document
       .querySelectorAll('a[href*="linkedin.com"]')

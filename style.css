@@ -30,9 +30,9 @@
 
   --ink-100: #FFFFFF;
   --ink-200: #F5EBE0;
-  --ink-300: #D9C1AE;
-  --ink-400: #B99B85;
-  --ink-500: #8F7663;
+  --ink-300: #E6D3C2;
+  --ink-400: #CDB5A1;
+  --ink-500: #A68F7C;
 
   --line-soft: rgba(255, 235, 220, 0.08);
   --line: rgba(255, 235, 220, 0.14);
@@ -2175,6 +2175,7 @@ kbd {
     font-size: 16px !important;
   }
 }
+
 /* ==========================================
    HERO "CURRENTLY" STACK — two pills
    ========================================== */
@@ -2190,7 +2191,6 @@ kbd {
   margin-bottom: 0;
 }
 
-/* On mobile, keep both pills but ensure they don't overflow */
 @media (max-width: 720px) {
   .hero-now-stack {
     gap: 8px;
@@ -2200,6 +2200,7 @@ kbd {
     width: 100%;
   }
 }
+
 /* ==========================================
    HERO "CURRENTLY" STACK — force proper stacking
    ========================================== */
@@ -2233,4 +2234,50 @@ kbd {
     width: 100% !important;
     flex-wrap: wrap !important;
   }
+}
+
+/* ==========================================
+   CV BUTTON + PROJECT RESULT LINE
+   ========================================== */
+.btn-cv {
+  border-color: var(--gold-line);
+  color: var(--gold-400);
+}
+.btn-cv:hover {
+  border-color: var(--gold-500);
+  background: var(--gold-dim);
+}
+
+.project-result {
+  font-size: 0.9rem;
+  line-height: 1.6;
+  color: var(--ink-200);
+  padding: 12px 14px;
+  margin-bottom: 20px;
+  background: var(--gold-dim);
+  border-left: 2px solid var(--gold-500);
+  border-radius: 0 10px 10px 0;
+  max-width: 440px;
+}
+.project-result strong {
+  color: var(--gold-400);
+  font-weight: 600;
+}
+
+/* ==========================================
+   MOBILE PERFORMANCE
+   ========================================== */
+@media (max-width: 720px) {
+  .ambient-blob {
+    filter: blur(70px);
+    animation: none;
+  }
+  .ambient-3 { display: none; }
+  .noise { display: none; }
+  .back-top,
+  .header.scrolled {
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+  .header.scrolled { background: rgba(74, 46, 36, 0.98); }
 }
