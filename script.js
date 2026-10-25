@@ -6,7 +6,89 @@
   const data = window.PORTFOLIO_DATA;
   if (!data) return;
 
-  /* --- STATS BAR: disabled (no fake stats) --- */
+  /* --- PROJECTS --- */
+  const projectsContainer = document.querySelector(".projects");
+  if (projectsContainer && Array.isArray(data.projects)) {
+    if (data.projects.length === 0) {
+      // Show empty state
+      projectsContainer.innerHTML = `
+        <div style="grid-column: 1 / -1; text-align: center; padding: 40px; border: 1px dashed var(--line); border-radius: 18px; background: var(--surface);">
+          <p style="color: var(--ink-300); font-family: var(--font-serif); font-size: 1.2rem; margin-bottom: 8px;">No projects published yet.</p>
+          <p style="color: var(--ink-400); font-size: 0.9rem;">Check back soon — I'm currently building my first one.</p>
+        </div>
+      `;
+    } else {
+      projectsContainer.innerHTML = data.projects.map((p, index) => {
+        // Alternate layout: every second project reverses
+        const isReverse = index % 2 !== 0;
+        const reverseClass = isReverse ? "reverse" : "";
+        const featuredClass = p.featured ? "featured" : "";
+        
+        // Handle the visual (chart)
+        let visualContent = "";
+        if (p.chart === "line") {
+          visualContent = `
+            <svg class="line-chart" viewBox="0 0 300 120" preserveAspectRatio="none">
+              <defs>
+                <linearGradient id="lineGrad-${index}" x1="0" y1="0" x2="1" y2="0">
+                  <stop offset="0%" stop-color="#059669"/>
+                  <stop offset="100%" stop-color="#FBBF24"/>
+                </linearGradient>
+                <linearGradient id="fillGrad-${index}" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stop-color="#10B981" stop-opacity="0.35"/>
+                  <stop offset="100%" stop-color="#FBBF24" stop-opacity="0"/>
+                </linearGradient>
+              </defs>
+              <path d="M0,90 L60,80 L120,55 L180,65 L240,30 L300,20 L300,120 L0,120 Z" fill="url(#fillGrad-${index})"/>
+              <path d="M0,90 L60,80 L120,55 L180,65 L240,30 L300,20" fill="none" stroke="url(#lineGrad-${index})" stroke-width="2.5" stroke-linecap="round"/>
+              <circle cx="300" cy="20" r="4" fill="#FBBF24"/>
+            </svg>
+          `;
+        } else if (p.chart !== "none") {
+          // Default to bar chart
+          visualContent = `
+            <div class="mini-chart">
+              <div class="bar" style="--h: 55%"></div>
+              <div class="bar" style="--h: 75%"></div>
+              <div class="bar" style="--h: 40%"></div>
+              <div class="bar" style="--h: 90%"></div>
+              <div class="bar accent" style="--h: 100%"></div>
+              <div class="bar" style="--h: 65%"></div>
+              <div class="bar" style="--h: 80%"></div>
+            </div>
+          `;
+        }
+
+        // Handle tags
+        const tagsHtml = (p.tags || []).map(t => `<span>${t}</span>`).join("");
+
+        return `
+          <article class="project ${featuredClass} ${reverseClass}" data-reveal>
+            <div class="project-info">
+              <div class="project-tag-row">
+                ${p.featured ? '<span class="project-badge">Featured</span>' : ''}
+                <span class="project-year">${p.year || '2025'}</span>
+              </div>
+              <h3 class="project-title">${p.title}</h3>
+              <p class="project-desc">${p.description}</p>
+              <div class="project-tags">
+                ${tagsHtml}
+              </div>
+              ${p.url ? `
+              <a href="${p.url}" target="_blank" rel="noopener" class="project-link">
+                View on GitHub
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+              </a>
+              ` : ''}
+            </div>
+            <div class="project-visual project-visual-${(index % 3) + 1}">
+              ${visualContent}
+            </div>
+          </article>
+        `;
+      }).join("");
+    }
+  }
 
   /* --- NOTES --- */
   const notesGrid = document.querySelector(".notes-grid");
@@ -81,13 +163,10 @@
       }
     });
 
-    /* Only rewrite links that point to a GitHub PROFILE (github.com/username).
-       Project links (github.com/username/repo/...) are left untouched. */
     document
       .querySelectorAll('a[href*="github.com"]')
       .forEach((a) => {
-        const isProfileOnly = /^https?:\/\/(www\.)?github\.com\/[^/]+\/?$/.test(a.href);
-        if (isProfileOnly && data.personal.github) a.href = data.personal.github;
+        if (data.personal.github) a.href = data.personal.github;
       });
     document
       .querySelectorAll('a[href*="linkedin.com"]')
@@ -218,37 +297,6 @@
   }, { threshold: 0.12, rootMargin: "0px 0px -40px 0px" });
 
   items.forEach((el) => obs.observe(el));
-})();
-
-/* ==========================================
-   COUNT-UP — kept for future use, does nothing now
-   ========================================== */
-(function countUp() {
-  const nums = document.querySelectorAll("[data-count]");
-  if (!nums.length) return;
-
-  const ease = (t) => (t === 1 ? 1 : 1 - Math.pow(2, -10 * t));
-
-  const obs = new IntersectionObserver((entries) => {
-    entries.forEach((entry) => {
-      if (!entry.isIntersecting) return;
-      const el = entry.target;
-      const target = parseFloat(el.dataset.count);
-      const duration = 1500;
-      const start = performance.now();
-
-      (function tick(now) {
-        const t = Math.min((now - start) / duration, 1);
-        el.textContent = Math.floor(ease(t) * target);
-        if (t < 1) requestAnimationFrame(tick);
-        else el.textContent = target;
-      })(performance.now());
-
-      obs.unobserve(el);
-    });
-  }, { threshold: 0.5 });
-
-  nums.forEach((el) => obs.observe(el));
 })();
 
 /* ==========================================
